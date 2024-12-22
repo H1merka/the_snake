@@ -69,7 +69,14 @@ class Apple(GameObject):
         """Метод определения положения яблока."""
         width_position = randint(0, GRID_WIDTH) * GRID_SIZE
         height_position = randint(0, GRID_HEIGHT) * GRID_SIZE
-        self.position = (width_position, height_position)
+        while True:
+            if (width_position, height_position) == ((SCREEN_WIDTH // 2),
+                                                     (SCREEN_HEIGHT // 2)):
+                width_position = randint(0, GRID_WIDTH) * GRID_SIZE
+                height_position = randint(0, GRID_HEIGHT) * GRID_SIZE
+            else:
+                self.position = (width_position, height_position)
+                break
 
     def draw(self):
         """Метод отрисовки яблока."""
@@ -190,7 +197,10 @@ def main():
         snake.draw()
         if snake.positions[0] == apple.position:
             snake.length += 1
-            apple.randomize_position()
+            while True:
+                apple.randomize_position()
+                if apple.position not in snake.positions:
+                    break
         handle_keys(snake)
         snake.update_direction()
         snake.move()
