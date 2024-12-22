@@ -61,7 +61,8 @@ class Apple(GameObject):
     def __init__(self):
         """Конструктор класса."""
         super().__init__()
-        self.position = (randint(0, GRID_WIDTH) * GRID_SIZE, randint(0, GRID_HEIGHT) * GRID_SIZE)
+        self.position = (randint(0, GRID_WIDTH) * GRID_SIZE,
+                         randint(0, GRID_HEIGHT) * GRID_SIZE)
         self.body_color = APPLE_COLOR
 
     def randomize_position(self):
