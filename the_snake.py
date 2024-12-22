@@ -61,14 +61,14 @@ class Apple(GameObject):
     def __init__(self):
         """Конструктор класса."""
         super().__init__()
-        self.position = Apple.randomize_position(self)
+        self.position = (randint(0, GRID_WIDTH) * GRID_SIZE, randint(0, GRID_HEIGHT) * GRID_SIZE)
         self.body_color = APPLE_COLOR
 
     def randomize_position(self):
         """Метод определения положения яблока."""
         width_position = randint(0, GRID_WIDTH) * GRID_SIZE
         height_position = randint(0, GRID_HEIGHT) * GRID_SIZE
-        return (width_position, height_position)
+        self.position = (width_position, height_position)
 
     def draw(self):
         """Метод отрисовки яблока."""
@@ -147,7 +147,7 @@ class Snake(GameObject):
                 head = (640, head[1])
 
         if head in self.positions[2:]:
-            return Snake.reset()
+            return Snake.reset(self)
         else:
             self.positions.insert(0, head)
             if len(self.positions) > self.length:
