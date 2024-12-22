@@ -132,19 +132,19 @@ class Snake(GameObject):
         if self.direction == UP:
             head = (head[0], head[1] - GRID_SIZE)
             if head[1] < 0:
-                head[1] = 480
+                head = (head[0], 480)
         elif self.direction == DOWN:
             head = (head[0], head[1] + GRID_SIZE)
             if head[1] > 480:
-                head[1] = 0
+                head = (head[0], 0)
         elif self.direction == RIGHT:
             head = (head[0] + GRID_SIZE, head[1])
             if head[0] > 640:
-                head[0] = 0
+                head = (0, head[1])
         else:
             head = (head[0] - GRID_SIZE, head[1])
             if head[0] < 0:
-                head[0] = 640
+                head = (640, head[1])
 
         if head in self.positions[2:]:
             return Snake.reset()
@@ -187,6 +187,9 @@ def main():
         # Тут опишите основную логику игры.
         apple.draw()
         snake.draw()
+        if snake.positions[0] == apple.position:
+            snake.length += 1
+            apple.randomize_position()
         handle_keys(snake)
         snake.update_direction()
         snake.move()
