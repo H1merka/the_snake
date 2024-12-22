@@ -9,6 +9,7 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
 GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
+CENTRAL_POSITION = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
 
 # Направления движения:
 UP = (0, -1)
@@ -47,7 +48,7 @@ class GameObject:
 
     def __init__(self):
         """Конструктор класса."""
-        self.position = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
+        self.position = CENTRAL_POSITION
         self.body_color = None
 
     def draw(self):
@@ -70,8 +71,7 @@ class Apple(GameObject):
         width_position = randint(0, GRID_WIDTH) * GRID_SIZE
         height_position = randint(0, GRID_HEIGHT) * GRID_SIZE
         while True:
-            if (width_position, height_position) == ((SCREEN_WIDTH // 2),
-                                                     (SCREEN_HEIGHT // 2)):
+            if (width_position, height_position) == CENTRAL_POSITION:
                 width_position = randint(0, GRID_WIDTH) * GRID_SIZE
                 height_position = randint(0, GRID_HEIGHT) * GRID_SIZE
             else:
@@ -91,7 +91,7 @@ class Snake(GameObject):
     def __init__(self):
         """Конструктор класса."""
         super().__init__()
-        self.position = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
+        self.position = CENTRAL_POSITION
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
@@ -129,7 +129,7 @@ class Snake(GameObject):
     def reset(self):
         """Метод сброса змеи в начальное состояние."""
         self.length = 1
-        self.positions = [((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))]
+        self.positions = [CENTRAL_POSITION]
         self.direction = choice([UP, DOWN, LEFT, RIGHT])
         screen.fill(BOARD_BACKGROUND_COLOR)
         return self.positions
@@ -140,19 +140,19 @@ class Snake(GameObject):
         if self.direction == UP:
             head = (head[0], head[1] - GRID_SIZE)
             if head[1] < 0:
-                head = (head[0], 480)
+                head = (head[0], SCREEN_HEIGHT)
         elif self.direction == DOWN:
             head = (head[0], head[1] + GRID_SIZE)
-            if head[1] > 480:
+            if head[1] > SCREEN_HEIGHT:
                 head = (head[0], 0)
         elif self.direction == RIGHT:
             head = (head[0] + GRID_SIZE, head[1])
-            if head[0] > 640:
+            if head[0] > SCREEN_WIDTH:
                 head = (0, head[1])
         else:
             head = (head[0] - GRID_SIZE, head[1])
             if head[0] < 0:
-                head = (640, head[1])
+                head = (SCREEN_WIDTH, head[1])
 
         if head in self.positions[2:]:
             return Snake.reset(self)
@@ -179,6 +179,9 @@ def handle_keys(game_object):
                 game_object.next_direction = LEFT
             elif event.key == pygame.K_RIGHT and game_object.direction != LEFT:
                 game_object.next_direction = RIGHT
+            elif event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                raise SystemExit
 
 
 def main():
